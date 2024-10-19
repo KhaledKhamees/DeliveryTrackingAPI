@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using DeliveryTrackingAPI.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
