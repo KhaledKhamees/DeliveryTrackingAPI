@@ -1,3 +1,4 @@
+using DeliveryTrackingAPI.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -42,6 +43,9 @@ namespace DeliveryTrackingAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Add SignalR
+            builder.Services.AddSignalR();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline
@@ -52,10 +56,17 @@ namespace DeliveryTrackingAPI
             }
 
             app.UseHttpsRedirection();
-            app.UseAuthentication(); // Only needs to be added once
+
+            app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllers();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapHub<LocationHub>("/locationHub");
+            });
 
             app.Run();
         }
